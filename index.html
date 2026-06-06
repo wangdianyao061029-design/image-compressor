@@ -3,15 +3,18 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="免费在线图片压缩工具，无需上传服务器，本地压缩保护隐私。支持 JPEG / PNG / WebP 格式。">
-<title>图片压缩器 - 免费在线压缩，保护隐私</title>
+<meta name="description" content="Free online image compressor. All processing is done locally in your browser - no upload, full privacy. Supports JPEG/PNG/WebP.">
+<title data-i18n="title">Image Compressor - Free Online Compression, Privacy Protected</title>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#fafafa;color:#1a1a2e;min-height:100vh}
 .container{max-width:680px;margin:0 auto;padding:24px 16px}
-header{text-align:center;padding:40px 0 20px}
+header{text-align:center;padding:32px 0 12px;position:relative}
 header h1{font-size:28px;font-weight:700;background:linear-gradient(135deg,#667eea,#764ba2);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-header p{color:#666;margin-top:8px;font-size:14px}
+header p{color:#666;margin-top:4px;font-size:14px}
+.lang-switch{position:absolute;top:32px;right:0;display:flex;gap:2px;background:#eee;border-radius:16px;padding:2px}
+.lang-switch button{padding:5px 12px;border:none;border-radius:14px;font-size:12px;font-weight:600;cursor:pointer;background:transparent;color:#999;transition:all .2s}
+.lang-switch button.active{background:#fff;color:#333;box-shadow:0 1px 2px rgba(0,0,0,.1)}
 .drop-zone{border:2px dashed #d0d5dd;border-radius:16px;padding:48px 24px;text-align:center;cursor:pointer;transition:all .2s;background:#fff}
 .drop-zone:hover,.drop-zone.drag-over{border-color:#667eea;background:#f8f9ff}
 .drop-zone .icon{font-size:48px;margin-bottom:12px}
@@ -46,34 +49,38 @@ footer a{color:#667eea;text-decoration:none}
 <body>
 <div class="container">
   <header>
-    <h1>📦 图片压缩器</h1>
-    <p>纯本地压缩 · 不上传服务器 · 保护你的隐私</p>
+    <div class="lang-switch">
+      <button class="active" onclick="setLang('zh')">中</button>
+      <button onclick="setLang('en')">EN</button>
+    </div>
+    <h1 data-i18n="h1">📦 图片压缩器</h1>
+    <p data-i18n="subtitle">纯本地压缩 · 不上传服务器 · 保护你的隐私</p>
   </header>
   <div class="drop-zone" id="dropZone">
     <div class="icon">🖼️</div>
-    <div class="title">拖拽图片到此处，或点击上传</div>
-    <div class="hint">支持 JPEG / PNG / WebP / BMP / SVG</div>
+    <div class="title" data-i18n="dropTitle">拖拽图片到此处，或点击上传</div>
+    <div class="hint" data-i18n="dropHint">支持 JPEG / PNG / WebP / BMP / SVG</div>
   </div>
   <input type="file" id="fileInput" accept="image/*">
   <div class="preview-area" id="previewArea">
     <div class="preview-grid">
       <div class="preview-card">
-        <div class="label">📥 原始图片 <span class="size" id="origSize">-</span></div>
-        <img id="origImg" alt="原始图片">
+        <div class="label">📥 <span data-i18n="original">原始图片</span> <span class="size" id="origSize">-</span></div>
+        <img id="origImg" alt="">
       </div>
       <div class="preview-card">
-        <div class="label">📤 压缩后 <span class="size saved" id="newSize">-</span></div>
-        <img id="newImg" alt="压缩后图片">
+        <div class="label">📤 <span data-i18n="compressed">压缩后</span> <span class="size saved" id="newSize">-</span></div>
+        <img id="newImg" alt="">
       </div>
     </div>
     <div class="controls">
       <div class="control-row">
-        <label>质量</label>
+        <label data-i18n="quality">质量</label>
         <input type="range" id="quality" min="10" max="100" value="70">
         <span class="val" id="qualVal">70%</span>
       </div>
       <div class="control-row">
-        <label>格式</label>
+        <label data-i18n="formatLabel">格式</label>
         <select id="format">
           <option value="image/jpeg">JPEG</option>
           <option value="image/png">PNG</option>
@@ -82,19 +89,27 @@ footer a{color:#667eea;text-decoration:none}
         <span id="savedPercent" class="saved" style="margin-left:auto"></span>
       </div>
       <div class="control-row">
-        <button class="btn btn-outline" id="resetBtn">🔄 重新选择</button>
+        <button class="btn btn-outline" id="resetBtn" data-i18n="reset">🔄 重新选择</button>
       </div>
     </div>
-    <button class="btn btn-primary" id="downloadBtn">⬇️ 下载压缩后的图片</button>
+    <button class="btn btn-primary" id="downloadBtn" data-i18n="download">⬇️ 下载压缩后的图片</button>
   </div>
   <div class="ads-placeholder">
-    <p style="margin:0">📢 广告位 — 接入 Google AdSense 后自动展示</p>
+    <p style="margin:0" data-i18n="adPlaceholder">📢 广告位 — Google AdSense</p>
   </div>
 </div>
 <footer>
-  <p>图片完全在浏览器本地处理，不会上传到任何服务器。</p>
+  <p data-i18n="footer">图片完全在浏览器本地处理，不会上传到任何服务器。</p>
 </footer>
 <script>
+const i18n={
+zh:{title:"图片压缩器 - 免费在线压缩，保护隐私",h1:"📦 图片压缩器",subtitle:"纯本地压缩 · 不上传服务器 · 保护你的隐私",dropTitle:"拖拽图片到此处，或点击上传",dropHint:"支持 JPEG / PNG / WebP / BMP / SVG",original:"原始图片",compressed:"压缩后",quality:"质量",formatLabel:"格式",reset:"🔄 重新选择",download:"⬇️ 下载压缩后的图片",adPlaceholder:"📢 广告位 — Google AdSense",footer:"图片完全在浏览器本地处理，不会上传到任何服务器。",alert:"请上传图片文件",saved:"🎉 节省 ","same:"大小不变",worse:"⚠️ 增大 "},
+en:{title:"Image Compressor - Free Online, Privacy Protected",h1:"📦 Image Compressor",subtitle:"Local compression · No upload · Privacy protected",dropTitle:"Drag & drop an image here, or click to upload",dropHint:"Supports JPEG / PNG / WebP / BMP / SVG",original:"Original",compressed:"Compressed",quality:"Quality",formatLabel:"Format",reset:"🔄 Select Another",download:"⬇️ Download Compressed Image",adPlaceholder:"📢 Ad Space — Google AdSense",footer:"All processing is done locally in your browser. Nothing is uploaded.",alert:"Please upload an image file",saved:"🎉 Saved ","same:"No change",worse:"⚠️ Larger by "}
+};
+let lang='zh';
+function setLang(l){lang=l;document.documentElement.lang=l==='zh'?'zh-CN':'en';document.querySelectorAll('.lang-switch button').forEach(b=>b.classList.toggle('active',(b.textContent==='中'&&l==='zh')||(b.textContent==='EN'&&l==='en')));document.querySelectorAll('[data-i18n]').forEach(el=>{const k=el.dataset.i18n;if(el.tagName==='TITLE'){document.title=i18n[l][k]}else if(k in i18n[l]){el.textContent=i18n[l][k]}});if(originalFile)updateSavedPercent()}
+function t(k){return i18n[lang][k]||k}
+
 const dropZone=document.getElementById('dropZone'),fileInput=document.getElementById('fileInput'),previewArea=document.getElementById('previewArea'),origImg=document.getElementById('origImg'),newImg=document.getElementById('newImg'),origSize=document.getElementById('origSize'),newSize=document.getElementById('newSize'),quality=document.getElementById('quality'),qualVal=document.getElementById('qualVal'),format=document.getElementById('format'),downloadBtn=document.getElementById('downloadBtn'),resetBtn=document.getElementById('resetBtn'),savedPercent=document.getElementById('savedPercent');
 let originalFile=null,compressedBlob=null;
 dropZone.addEventListener('click',()=>fileInput.click());
@@ -102,12 +117,13 @@ dropZone.addEventListener('dragover',e=>{e.preventDefault();dropZone.classList.a
 dropZone.addEventListener('dragleave',()=>dropZone.classList.remove('drag-over'));
 dropZone.addEventListener('drop',e=>{e.preventDefault();dropZone.classList.remove('drag-over');if(e.dataTransfer.files.length)handleFile(e.dataTransfer.files[0])});
 fileInput.addEventListener('change',e=>{if(e.target.files.length)handleFile(e.target.files[0])});
-resetBtn.addEventListener('click',()=>{previewArea.style.display='none';dropZone.style.display='';originalFile=null;compressedBlob=null;fileInput.value=''});
+resetBtn.addEventListener('click',()=>{previewArea.style.display='none';dropZone.style.display='';originalFile=null;compressedBlob=null;fileInput.value='';setLang(lang)});
 quality.addEventListener('input',()=>{qualVal.textContent=quality.value+'%';if(originalFile)compress()});
 format.addEventListener('change',()=>{if(originalFile&&format.value==='image/png'){quality.value=100;qualVal.textContent='100%';quality.disabled=true}else{quality.disabled=false};if(originalFile)compress()});
 downloadBtn.addEventListener('click',()=>{if(!compressedBlob)return;const url=URL.createObjectURL(compressedBlob),a=document.createElement('a');a.href=url;a.download='compressed.'+(format.value.split('/')[1]||'jpg');a.click();URL.revokeObjectURL(url)});
-function handleFile(file){if(!file.type.startsWith('image/')){alert('请上传图片文件');return};originalFile=file;origSize.textContent=formatBytes(file.size);const reader=new FileReader();reader.onload=e=>{origImg.src=e.target.result;compress()};reader.readAsDataURL(file);dropZone.style.display='none';previewArea.style.display='block';if(format.value==='image/png'){quality.value=100;qualVal.textContent='100%';quality.disabled=true}}
-function compress(){const img=new Image();img.onload=()=>{const canvas=document.createElement('canvas');canvas.width=img.width;canvas.height=img.height;const ctx=canvas.getContext('2d');ctx.drawImage(img,0,0);const mime=format.value,q=quality.value/100;canvas.toBlob(blob=>{compressedBlob=blob;const url=URL.createObjectURL(blob);newImg.src=url;newSize.textContent=formatBytes(blob.size);const pct=Math.round((1-blob.size/originalFile.size)*100);savedPercent.textContent=pct>0?('🎉 节省 '+pct+'%'):(pct===0?'大小不变':('⚠️ 增大 '+Math.abs(pct)+'%'))},mime,q)};img.src=origImg.src}
+function handleFile(file){if(!file.type.startsWith('image/')){alert(t('alert'));return};originalFile=file;origSize.textContent=formatBytes(file.size);const reader=new FileReader();reader.onload=e=>{origImg.src=e.target.result;compress()};reader.readAsDataURL(file);dropZone.style.display='none';previewArea.style.display='block';if(format.value==='image/png'){quality.value=100;qualVal.textContent='100%';quality.disabled=true}}
+function compress(){const img=new Image();img.onload=()=>{const canvas=document.createElement('canvas');canvas.width=img.width;canvas.height=img.height;const ctx=canvas.getContext('2d');ctx.drawImage(img,0,0);const mime=format.value,q=quality.value/100;canvas.toBlob(blob=>{compressedBlob=blob;const url=URL.createObjectURL(blob);newImg.src=url;newSize.textContent=formatBytes(blob.size);updateSavedPercent()},mime,q)};img.src=origImg.src}
+function updateSavedPercent(){const pct=Math.round((1-compressedBlob.size/originalFile.size)*100);savedPercent.textContent=pct>0?(t('saved')+pct+'%'):(pct===0?t('same'):(t('worse')+Math.abs(pct)+'%'))}
 function formatBytes(b){if(b===0)return'0 B';const k=1024,sizes=['B','KB','MB','GB'],i=Math.floor(Math.log(b)/Math.log(k));return parseFloat((b/Math.pow(k,i)).toFixed(1))+' '+sizes[i]}
 </script>
 </body>
